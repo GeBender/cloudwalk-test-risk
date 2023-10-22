@@ -104,4 +104,10 @@ Instructions for installing and running the application designed to solve the pr
 
 ## README
 
-- Instructions
+1. Clone this repo
+2. Config your database the way you wants (You can try the standard Sqlite3, it's slow but works to our goals)
+3. Import the Transaction seeds: ```rails import:csv```
+4. Start the server: ```rails s```
+
+---
+
