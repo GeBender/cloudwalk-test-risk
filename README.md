@@ -111,3 +111,7 @@ Instructions for installing and running the application designed to solve the pr
 
 ---
 
+#### Tests
+```rails t```
+
+---
