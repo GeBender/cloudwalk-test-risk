@@ -3,8 +3,8 @@ class TransactionsIntegrationTest < ActionDispatch::IntegrationTest
     transaction_data = {
       "transaction_id": 2342357,
       "merchant_id": 29744,
-      "user_id": 97051,
-      "card_number": "434505******9116",
+      "user_id": 9705,
+      "card_number": "434505******9114",
       "transaction_date": "2019-11-31T23:16:32.812632",
       "transaction_amount": 373,
       "device_id": 285475

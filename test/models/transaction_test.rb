@@ -81,4 +81,25 @@ class TransactionTest < ActiveSupport::TestCase
     @transaction.device_id = 105
     assert @transaction.valid?
   end
+
+  test 'transaction whitout device is not safe' do
+    @transaction.device_id = nil
+    assert_not @transaction.safe?
+  end
+
+  test 'transaction has a critical issue if user has more than given chargeback in the given period' do
+    assert_equal true, @transaction.chargeback_issues(1, (@transaction.transaction_date - 1.month))
+  end
+
+  test 'transaction has a critical issue if user has used more than given unic cards in the given period' do
+    assert_equal true, @transaction.cards_used_issues(1, (@transaction.transaction_date - 1.month))
+  end
+
+  test 'transaction has a critical issue if user has made more requests than a given in the given period' do
+    assert_equal true, @transaction.request_issues(1, (@transaction.transaction_date - 1.month))
+  end
+
+  test 'transaction has a critical issue if user has made a given number of similar requests in a given period' do
+    assert_equal true, @transaction.similar_request_issues(1, (@transaction.transaction_date - 1.month))
+  end
 end
