@@ -107,8 +107,9 @@ Instructions for installing and running the application designed to solve the pr
 1. Clone this repo
 2. Config your database the way you wants (You can try the standard Sqlite3, it's slow but works to our goals)
 3. Import the Transaction seeds: ```rails import:csv```
-4. Start the server: ```rails s```
-5. Run the tests: ```rails t```
+4. Crate a .env file on the project root path with your token, exemple: ```TOKEN=secret```
+5. Start the server: ```rails s```
+6. Run the tests: ```rails t```
 
 ---
 
@@ -118,8 +119,14 @@ Instructions for installing and running the application designed to solve the pr
     Payload example:
     
     ```POST http://localhost:3000/transactions/validate```
+        
+    ```Content-Type: application/json```
+    
+    ```Authorization: Bearer {YOUR SECRET}```
+
+    ```Body raw (json)```
+
     ```json
-    // Body raw (json)
     {
       "transaction_id" : 2342357,
       "merchant_id" : 29744,
@@ -151,8 +158,14 @@ Instructions for installing and running the application designed to solve the pr
     Payload example:
     
     ```POST http://localhost:3000/transactions/set-chargeback```
+
+    ```Content-Type: application/json```
+    
+    ```Authorization: Bearer {YOUR SECRET}```
+
+    ```Body raw (json)```
+
     ```json
-    // Body raw (json)
     {
       "transaction_id": 2132056
     }
@@ -178,8 +191,14 @@ Instructions for installing and running the application designed to solve the pr
     Payload example:
     
     ```POST http://localhost:3000/transactions```
+
+    ```Content-Type: application/json```
+    
+    ```Authorization: Bearer {YOUR SECRET}```
+
+    ```Body raw (json)```
+
     ```json
-    // Body raw (json)
     {
       "transaction_id" : 2342357,
       "merchant_id" : 29744,
