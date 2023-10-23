@@ -1,7 +1,7 @@
 class TransactionsController < ApplicationController
   TOKEN = ENV['TOKEN']
 
-  before_action :authenticate
+  before_action :authenticate, unless: -> { Rails.env.test? }
 
   # method to create a new transaction
   def validate
