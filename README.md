@@ -73,11 +73,12 @@ Using this [**csv**](https://gist.github.com/cloudwalk-tests/76993838e65d7e0f988
 1. **Analyze the data provided and present your conclusions (consider that all transactions are made using a mobile device):**
 
     Considering the following possible risk factors among those available:
+    1. Cards with chargebacks
     1. The number of different cards used by the same user.
     2. The number of different devices used by the same user.
     The number of previous chargebacks by the user.
 
-    It is concluded that out of the **3,199** transactions presented, 97 transactions from only 5 users are extremely suspicious because they use a disproportionately high number of different cards and an equally disproportionate number of previous chargebacks. These users are: **11750, 91637, 79054, 96025, and 78262**.
+    It is concluded that out of the **3,199** transactions presented, **274** unique cards received chargeback and will no longer be authorized. 97 transactions from only 5 users are extremely suspicious because they use a disproportionately high number of different cards and an equally disproportionate number of previous chargebacks. These users are: **11750, 91637, 79054, 96025, and 78262**.
     \
     Continuing the analysis, forming a kind of score, approximately 47 users exhibit less aggressive but still suspicious activity, as they use more than one card and have some previous chargebacks.
     \
