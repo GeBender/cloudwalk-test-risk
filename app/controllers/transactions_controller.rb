@@ -1,4 +1,8 @@
 class TransactionsController < ApplicationController
+  TOKEN = ENV['TOKEN']
+
+  before_action :authenticate
+
   # method to create a new transaction
   def validate
     # create a new transaction from the raw post data
@@ -75,5 +79,11 @@ class TransactionsController < ApplicationController
       transaction_id: transaction.transaction_id,
       recommendation: 'deny'
     }
+  end
+
+  def authenticate
+    authenticate_or_request_with_http_token do |token, options|
+      ActiveSupport::SecurityUtils.secure_compare(token, TOKEN)
+    end
   end
 end
