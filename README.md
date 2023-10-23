@@ -40,7 +40,7 @@ Below are the essay answers proposed in the test:
     - **Merchant**: A customer of the acquiring bank and the holder of the point of sale provided by the acquiring bank for their transactions. It is their responsibility to carry out transactions and receive payments.
     - **Acquiring Bank**: An intermediary responsible for secure communication between the merchant and the card network through the point of sale, for risk analysis and anti-fraud procedures, and for receiving funds from the card network and passing them to the merchant.
     - **Card Network**: Responsible for card brands, communication of transactions to the issuing bank, and the execution of transactions between the issuing bank and the acquiring bank when approved.
-    - **Issuer Bank**: The bank that issued the card, holding the customer's account. It is responsible for verifying card details, the customer's balance, reserving the transaction amount in the customer's account, and communicating with the card network.
+    - **Issuer Bank**: The bank that issued the card, holding the customer's account. It is responsible for verifying card details, the customer's founds, reserving the transaction amount in the customer's account, and communicating with the card network.
 
     ##
 
