@@ -108,10 +108,74 @@ Instructions for installing and running the application designed to solve the pr
 2. Config your database the way you wants (You can try the standard Sqlite3, it's slow but works to our goals)
 3. Import the Transaction seeds: ```rails import:csv```
 4. Start the server: ```rails s```
+5. Run the tests: ```rails t```
 
 ---
 
-#### Tests
-```rails t```
+## Endpoints
+1. **Validate transaction: Deny or approve a transaction**
+    
+    Payload example:
+    ```json
+    {
+      "transaction_id" : 2342357,
+      "merchant_id" : 29744,
+      "user_id" : 97051,
+      "card_number" : "434505******9116",
+      "transaction_date" : "2019-11-31T23:16:32.812632",
+      "transaction_amount" : 373,
+      "device_id" : 285475
+    }
+    ```
+
+    Approve response example:
+    ```json
+    {
+      "transaction_id": 2342357,
+      "recommendation": "approve"
+    }
+    ```
+
+    Deny response example:
+    ```json
+    {
+      "transaction_id": 2342357,
+      "recommendation": "deny"
+    }
+    ```
+
+
+## Validations
+1. **Card number with previous chargback**: Every transaction with a card number that has a previous chargeback will be denied.
+
+    ```json
+    "card_number": "444456******4210" # DENY
+    "card_number": "415944******8642" # APPROVE
+    ```
+2. **User with previous chargebacks**: No user with a history of **1 or more** chargebacks in the **last week**, or **more than 2** in the **last month**, or **more than 3** in the **last year**, even when using a new card, will be approved.
+    ```json
+    "user_id" : 90182,
+    "card_number" : "464296******1234",
+    "transaction_date" : "2019-11-22T15:39:27.464858", # DENY
+    
+    ---
+    
+    "user_id" : 90182,
+    "card_number" : "464296******1234",
+    "transaction_date" : "2020-11-22T15:39:27.464858" # APPROVE
+    ```
+
+3. **Attempts**: Sent transactions will only be approved by **one per minute** and **five per hour**.".
+    ```json
+    "user_id" : 18479,
+    "transaction_date" : "2019-11-22T15:39:27.464858" # DENY
+    
+    ---
+    
+    "user_id" : 18479,
+    "transaction_date" : "2019-11-22T15:40:27.464858" # APPROVE
+    ```
 
 ---
+
+## That's it folks!

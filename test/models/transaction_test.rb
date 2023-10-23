@@ -87,19 +87,29 @@ class TransactionTest < ActiveSupport::TestCase
     assert_not @transaction.safe?
   end
 
-  test 'transaction has a critical issue if user has more than given chargeback in the given period' do
-    assert_equal true, @transaction.chargeback_issues(1, (@transaction.transaction_date - 1.month))
+  test 'transaction with card chargeback is not safe' do
+    assert @transaction.card_chargeback?
   end
 
-  test 'transaction has a critical issue if user has used more than given unic cards in the given period' do
-    assert_equal true, @transaction.cards_used_issues(1, (@transaction.transaction_date - 1.month))
+  test 'transaction with no card chargeback is safe' do
+    @transaction.card_number = '434505******9117'
+    assert_not @transaction.card_chargeback?
   end
 
-  test 'transaction has a critical issue if user has made more requests than a given in the given period' do
-    assert_equal true, @transaction.request_issues(1, (@transaction.transaction_date - 1.month))
+  test 'transaction with more or equal user chargebacks than given in period is not safe' do
+    assert @transaction.user_chargeback(1, 1.month)
   end
 
-  test 'transaction has a critical issue if user has made a given number of similar requests in a given period' do
-    assert_equal true, @transaction.similar_request_issues(1, (@transaction.transaction_date - 1.month))
+  test 'transaction with less user chargebacks than given in period is not safe' do
+    assert_not @transaction.user_chargeback(2, 1.month)
+  end
+
+  test 'transaction with more or equal attempts than given in period is not safe' do
+    assert @transaction.attempts(1, 30.seconds)
+  end
+
+  test 'transaction with less attempts than given in period is safe' do
+    @transaction.transaction_date = '2019-12-31T23:16:32.812632'
+    assert_not @transaction.attempts(1, 30.minutes)
   end
 end

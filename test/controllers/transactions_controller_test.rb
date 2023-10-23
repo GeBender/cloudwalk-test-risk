@@ -1,22 +1,22 @@
-require "test_helper"
+require 'test_helper'
 
 class TransactionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @transaction = transactions(:one)
   end
 
-  test "should approve a valid and safe transaction" do
+  test 'should approve a valid and safe transaction' do
     valid_transaction_data = {
       "transaction_id": 2342357,
       "merchant_id": 29744,
       "user_id": 9705,
-      "card_number": "434505******9116",
-      "transaction_date": "2022-11-31T23:16:32.812632",
+      "card_number": '434505******9117',
+      "transaction_date": '2022-11-31T23:16:32.812632',
       "transaction_amount": 373,
       "device_id": 285475
     }
 
-    post transactions_url, params: valid_transaction_data, as: :json
+    post '/transactions/validate', params: valid_transaction_data, as: :json
     assert_response :success
 
     response_data = JSON.parse(response.body)
@@ -29,7 +29,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       "transaction_date": '2019-11-31T23:16:32.812632'
     }
 
-    post transactions_url, params: invalid_transaction_data, as: :json
+    post '/transactions/validate', params: invalid_transaction_data, as: :json
     assert_response :unprocessable_entity
   end
 
@@ -44,7 +44,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       "device_id": 1
     }
 
-    post transactions_url, params: invalid_transaction_data, as: :json
+    post '/transactions/validate', params: invalid_transaction_data, as: :json
     assert_response :success
 
     response_data = JSON.parse(response.body)

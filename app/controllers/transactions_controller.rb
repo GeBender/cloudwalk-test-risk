@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   # method to create a new transaction
-  def create
+  def validate
     # create a new transaction from the raw post data
     transaction_data = JSON.parse(request.raw_post)
     transaction = Transaction.new(transaction_data)
