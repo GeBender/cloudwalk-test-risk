@@ -114,9 +114,12 @@ Instructions for installing and running the application designed to solve the pr
 
 ## Endpoints
 1. **Validate transaction: Deny or approve a transaction**
-    
+        
     Payload example:
+    
+    ```POST http://localhost:3000/transactions/validate```
     ```json
+    // Body raw (json)
     {
       "transaction_id" : 2342357,
       "merchant_id" : 29744,
@@ -143,39 +146,111 @@ Instructions for installing and running the application designed to solve the pr
       "recommendation": "deny"
     }
     ```
+2. **Set chargeback**
 
+    Payload example:
+    
+    ```POST http://localhost:3000/transactions/set-chargeback```
+    ```json
+    // Body raw (json)
+    {
+      "transaction_id": 2132056
+    }
+    ```
+
+    Success response example:
+    ```json
+    {
+      "transaction_id": 2342357,
+      "has_cbk": true
+    }
+    ```
+
+    Fail response example:
+    ```json
+    {
+        "error": "Transaction not found"
+    }
+    ```
+
+3. **Create a transaction**
+        
+    Payload example:
+    
+    ```POST http://localhost:3000/transactions```
+    ```json
+    // Body raw (json)
+    {
+      "transaction_id" : 2342357,
+      "merchant_id" : 29744,
+      "user_id" : 97051,
+      "card_number" : "434505******9116",
+      "transaction_date" : "2019-11-31T23:16:32.812632",
+      "transaction_amount" : 373,
+      "device_id" : 285475
+    }
+    ```
+
+    Success response example:
+    ```json
+    {
+      "transaction_id": 2342357,
+      "approved": true,
+      "created": true
+    }
+    ```
+
+    Fail response example:
+    ```json
+    {
+      "transaction_id": 2342357,
+      "denied": true,
+      "created": false
+    }
+    ```
 
 ## Validations
-1. **Card number with previous chargback**: Every transaction with a card number that has a previous chargeback will be denied.
+1. **Card number with previous chargback**: Every transaction with a card number that has a previous chargeback will be denied, examples:
 
     ```json
-    "card_number": "444456******4210" # DENY
-    "card_number": "415944******8642" # APPROVE
+    "card_number": "444456******4210" // DENY
+    "card_number": "415944******8642"// APPROVE
     ```
-2. **User with previous chargebacks**: No user with a history of **1 or more** chargebacks in the **last week**, or **more than 2** in the **last month**, or **more than 3** in the **last year**, even when using a new card, will be approved.
+2. **User with previous chargebacks**: No user with a history of **1 or more** chargebacks in the **last week**, or **more than 2** in the **last month**, or **more than 3** in the **last year**, even when using a new card, will be approved, examples:
     ```json
     "user_id" : 90182,
     "card_number" : "464296******1234",
-    "transaction_date" : "2019-11-22T15:39:27.464858", # DENY
+    "transaction_date" : "2019-11-22T15:39:27.464858", // DENY
     
-    ---
+    // ---
     
     "user_id" : 90182,
     "card_number" : "464296******1234",
-    "transaction_date" : "2020-11-22T15:39:27.464858" # APPROVE
+    "transaction_date" : "2020-11-22T15:39:27.464858" // APPROVE
     ```
 
-3. **Attempts**: Sent transactions will only be approved by **one per minute** and **five per hour**.".
+3. **Attempts**: Sent transactions will only be approved by **one per minute** and **five per hour**.", examples:
     ```json
     "user_id" : 18479,
-    "transaction_date" : "2019-11-22T15:39:27.464858" # DENY
+    "transaction_date" : "2019-11-22T15:39:27.464858" // DENY
     
-    ---
+    // ---
     
     "user_id" : 18479,
-    "transaction_date" : "2019-11-22T15:40:27.464858" # APPROVE
+    "transaction_date" : "2019-11-22T15:40:27.464858" // APPROVE
     ```
-
+4. **Previous hight Values**: Second transaction above **R$ 1.000,00** in **one hour** or above **R$ 2.000,00** in **one day** will be denied.
+    ```json
+    "user_id" : 36595,
+    "transaction_amount" : 1260.77,
+    "transaction_date" : "2019-11-30T22:07:24.824174" // DENY
+    
+    // ---
+    
+    "user_id" : 36595,
+    "transaction_amount" : 1260.77,
+    "transaction_date" : "2019-11-30T23:07:24.824174",, // APPROVE
+    ```
 ---
 
 ## That's it folks!

@@ -50,4 +50,25 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     response_data = JSON.parse(response.body)
     assert_equal 'deny', response_data['recommendation']
   end
+
+  test 'should set a transaction as chargeback' do
+    transaction_data = {
+      "transaction_id": 1
+    }
+
+    post '/transactions/set-chargeback', params: transaction_data, as: :json
+    assert_response :success
+
+    response_data = JSON.parse(response.body)
+    assert_equal true, response_data['has_cbk']
+  end
+
+  test 'should return 404 when transaction is not found' do
+    transaction_data = {
+      "transaction_id": 999
+    }
+
+    post '/transactions/set-chargeback', params: transaction_data, as: :json
+    assert_response :not_found
+  end
 end

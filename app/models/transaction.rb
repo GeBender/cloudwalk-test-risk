@@ -33,10 +33,9 @@ class Transaction < ApplicationRecord
       user_chargeback(1, 7.days) ||
       user_chargeback(2, 1.month) ||
       attempts(1, 1.minute) ||
-      attempts(5, 1.hour)
-
-    #                request_issues(5, transaction_date - 1.hour) ||
-    #                similar_request_issues(1, transaction_date - 15.minutes)
+      attempts(5, 1.hour) ||
+      max_value(1000, 1.hour) ||
+      max_value(2000, 1.day)
   end
 
   def card_chargeback?
@@ -58,16 +57,15 @@ class Transaction < ApplicationRecord
                .count >= count
   end
 
-  # check if card_number has been used more than count in the last date
-  def cards_used_issues(count, date)
-    # select the total diff cards used in the last date
-    return true if Transaction.where(user_id:)
-                              .where('transaction_date > ?', date)
-                              .distinct.count(:card_number) > count
+  def max_value(value, date)
+    return false unless transaction_amount >= value
 
-    false
+    Transaction.where(user_id:)
+               .where('transaction_date > ?', transaction_date - date)
+               .where('transaction_amount >= ?', value)
+               .count.positive?
   end
-
+  
   def valid_datetime_format
     begin
       DateTime.parse(transaction_date.to_s)
